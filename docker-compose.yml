@@ -1,0 +1,64 @@
+version: "2.2"
+
+services:
+
+  redis:
+    restart: always
+    build: ./redis/
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+  mariadb:
+    restart: always
+    build: ./mariadb/
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=pihomecloud
+      - MARIADB_DATABASE=pihomecloud
+      - MARIADB_USER=pihomecloud
+      - MARIADB_PASSWORD=pihomecloud
+
+  web:
+    restart: always
+    build: ./web/
+    depends_on:
+      - redis
+      - mariadb
+    ports:
+      - "9000:9000"
+    volumes:
+      - pihomecloud:/var/www/pihomecloud
+    links:
+      - redis:redis
+      - mariadb:mysql
+
+  nginx:
+    restart: always
+    build: ./nginx/
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - pihomecloud:/var/www/pihomecloud
+    volumes_from:
+      - web
+    links:
+      - web:web
+
+volumes: 
+  redisdata:
+          #external: true
+
+  mysqldata:
+          # external: true
+
+  pihomecloud:
+          #external: true
+    
