@@ -14,7 +14,8 @@ RUN cd /var/www/pihomecloud && tar --strip-components=1 -xvf latest-17.tar.bz2
 
 ADD www.conf /etc/php/7.3/fpm/pool.d/www.conf
 ADD apc.php /var/www/pihomecloud/apc.php
-#ADD config.php /var/www/pihomecloud/config/config.php this was for already configured install 
+
+ADD add_cache_config.php /var/www/pihomecloud/config/
 
 RUN ln -sf /dev/stdout /var/log/php7.3-fpm.log
 
