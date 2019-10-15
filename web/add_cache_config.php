@@ -2,7 +2,17 @@
 
 include 'config.php';
 
-$CACHECFG = array("color" => "green");
+// Config for NON SSL, APC and MEMCACHE
+$CACHECFG = array ('csrf.disabled' => true,
+  'memcache.local' => '\\OC\\Memcache\\APCu',
+  'memcache.locking' => '\\OC\\Memcache\\Redis',
+  'redis' => 
+  array (
+    'host' => 'redis',
+    'port' => 6379,
+  ),
+  'filelocking.enabled' => true,
+);
 
 $NEWCONFIG = array_merge($CONFIG, $CACHECFG);
 
